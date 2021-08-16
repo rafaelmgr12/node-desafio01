@@ -86,7 +86,7 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
   todo.title = title;
   todo.deadline = new Date(deadline);
 
-  return response.status(201).json(todo);
+  return response.status(200).json(todo);
 });
 
 app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
@@ -109,15 +109,14 @@ app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
   const { id } = request.params;
   const { user } = request;
 
-  const todo = user.todos.find(todo => todo.id === id);
+  const todo = user.todos.find((todo) => todo.id === id);
 
   if (!todo) {
-    return response.status(404).json({ error: 'Todo not found.' });
+    return response.status(404).send("Todo not found");
   }
-
   user.todos.splice(todo, 1);
 
-  return response.status(204).send();
+  return response.status(204).json(todo);
 });
 
 module.exports = app;
